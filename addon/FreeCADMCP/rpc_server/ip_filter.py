@@ -12,8 +12,9 @@ class FilteredXMLRPCServer(ThreadingMixIn, SimpleXMLRPCServer):
     """XML-RPC server that filters connections by allowed IP addresses/subnets.
 
     Threaded so get_rpc_status stays answerable while a wedged GUI task blocks
-    another request; handlers serialise onto the GUI thread through
-    dispatch_to_gui, so concurrency here is safe.
+    another request. Document queries and synchronous modelling handlers
+    serialise onto the GUI thread through dispatch_to_gui. The opt-in
+    execute_code_async worker retains its existing background execution.
 
     daemon_threads must stay true — ThreadingMixIn.server_close() joins
     non-daemon request threads, which would make Stop wait out the stuck
